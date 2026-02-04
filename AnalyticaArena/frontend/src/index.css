@@ -1,0 +1,301 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#0a0a0a] text-gray-100 min-h-screen;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    background: radial-gradient(circle at 20% 50%, rgba(249, 115, 22, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.06) 0%, transparent 50%),
+      #0a0a0a;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-gradient-to-br from-zinc-900/90 to-zinc-900/70 backdrop-blur-xl border border-zinc-800/50 rounded-2xl shadow-2xl;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-card:hover {
+    @apply border-orange-500/30 bg-gradient-to-br from-zinc-900 to-zinc-800/80;
+    box-shadow: 0 12px 40px 0 rgba(249, 115, 22, 0.15);
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-orange-600 via-orange-500 to-red-500 hover:from-orange-500 hover:via-red-500 hover:to-orange-600 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300 shadow-lg shadow-orange-500/30 hover:shadow-orange-400/50 hover:scale-105;
+    background-size: 200% auto;
+  }
+
+  .btn-secondary {
+    @apply bg-zinc-800/80 hover:bg-zinc-700/80 backdrop-blur text-gray-100 font-semibold py-3 px-8 rounded-xl transition-all duration-300 border border-zinc-700/50 hover:border-orange-500/30;
+  }
+
+  .input-field {
+    @apply bg-zinc-900/50 border border-zinc-800/50 rounded-xl px-4 py-3 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all backdrop-blur;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-2xl cursor-pointer;
+  }
+}
+
+/* Gradient text effect */
+.gradient-text {
+  @apply bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 bg-clip-text text-transparent;
+  animation: shimmer 3s ease-in-out infinite;
+  background-size: 200% auto;
+}
+
+@keyframes shimmer {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Glow effect */
+.glow {
+  filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.5));
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.3));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 25px rgba(249, 115, 22, 0.7));
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-zinc-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gradient-to-b from-orange-600 to-red-500 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply from-orange-500 to-red-400;
+}
+
+/* Loading spinner with gradient */
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(249, 115, 22, 0.1);
+  border-radius: 50%;
+  border-top-color: #f97316;
+  border-right-color: #ea580c;
+  animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Floating animation */
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Particle effect background */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.particle {
+  position: absolute;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.6) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float-particle 20s infinite;
+}
+
+@keyframes float-particle {
+  0% {
+    transform: translateY(100vh) scale(0);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-100vh) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Neon border effect */
+.neon-border {
+  position: relative;
+  border: 2px solid transparent;
+  background: linear-gradient(#0a0a0a, #0a0a0a) padding-box,
+    linear-gradient(45deg, #f97316, #ea580c, #ec4899) border-box;
+  animation: neon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes neon-pulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(249, 115, 22, 0.3),
+      0 0 10px rgba(249, 115, 22, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 15px rgba(249, 115, 22, 0.5),
+      0 0 25px rgba(249, 115, 22, 0.3),
+      0 0 35px rgba(249, 115, 22, 0.2);
+  }
+}
+
+/* Slide in animations */
+.slide-in-left {
+  animation: slideInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide-in-right {
+  animation: slideInRight 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Scale in animation */
+.scale-in {
+  animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Stagger animation for lists */
+.stagger-item {
+  animation: stagger 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.stagger-item:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.stagger-item:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.stagger-item:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.stagger-item:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.stagger-item:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+.stagger-item:nth-child(6) {
+  animation-delay: 0.3s;
+}
+
+@keyframes stagger {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Orange gradient overlay for cards */
+.gradient-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle at center, rgba(249, 115, 22, 0.2) 0%, transparent 70%);
+  border-radius: 0 1rem 0 0;
+  pointer-events: none;
+}
