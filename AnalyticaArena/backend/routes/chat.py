@@ -47,9 +47,29 @@ async def chat_query(
             detail="Dataset not found"
         )
     
-    # Load DataFrame
+    # Load DataFrame from stored file
     try:
-        df = pd.read_json(io.StringIO(dataset["data"]), orient='records')
+        file_path = dataset.get("file_path")
+        if not file_path or not os.path.exists(file_path):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Dataset file not found on disk"
+            )
+        
+        file_ext = os.path.splitext(file_path)[1].lower()
+        if file_ext == '.csv':
+            df = pd.read_csv(file_path)
+        elif file_ext in ['.xlsx', '.xls']:
+            df = pd.read_excel(file_path)
+        elif file_ext == '.json':
+            df = pd.read_json(file_path)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Unsupported file extension: {file_ext}"
+            )
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

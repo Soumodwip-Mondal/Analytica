@@ -83,6 +83,7 @@ pip install -r requirements.txt
 # - GEMINI_API_KEY: Google Gemini API key (already configured)
 # - JWT_SECRET_KEY: Secret key for JWT tokens (change in production)
 # - CHAT_RATE_LIMIT: Rate limit for chat queries (default: "10/minute")
+# - UPLOAD_DIR: Directory to store uploaded files (default: "./uploads")
 ```
 
 #### 3. Frontend Setup

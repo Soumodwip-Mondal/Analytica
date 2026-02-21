@@ -3,6 +3,8 @@ from typing import List
 import pandas as pd
 import io
 import os
+import uuid
+import aiofiles
 from datetime import datetime
 from bson import ObjectId
 
@@ -12,6 +14,9 @@ from utils.database import get_database
 from utils.helpers import validate_file, infer_column_types, safe_serialize
 
 router = APIRouter(prefix="/api/upload", tags=["upload"])
+
+UPLOAD_DIR = os.getenv("UPLOAD_DIR", "./uploads")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE_MB", 50)) * 1024 * 1024
 
@@ -34,10 +39,25 @@ async def upload_dataset(
             detail={"errors": validation["errors"]}
         )
     
-    # Parse file based on type
+    file_ext = validation["extension"]
+    
+    # Generate unique filename for storage
+    file_id = str(uuid.uuid4())
+    stored_filename = f"{file_id}{file_ext}"
+    file_path = os.path.join(UPLOAD_DIR, stored_filename)
+    
+    # Save file to disk
     try:
-        file_ext = validation["extension"]
-        
+        async with aiofiles.open(file_path, "wb") as f:
+            await f.write(content)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error saving file to disk: {str(e)}"
+        )
+    
+    # Parse file for column inference and row check
+    try:
         if file_ext == '.csv':
             df = pd.read_csv(io.BytesIO(content))
         elif file_ext in ['.xlsx', '.xls']:
@@ -45,6 +65,9 @@ async def upload_dataset(
         elif file_ext == '.json':
             df = pd.read_json(io.BytesIO(content))
         else:
+            # Cleanup if invalid
+            if os.path.exists(file_path):
+                os.remove(file_path)
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Unsupported file type"
@@ -53,12 +76,18 @@ async def upload_dataset(
         # Check row limit
         max_rows = int(os.getenv("MAX_ROWS", 100000))
         if len(df) > max_rows:
+            # Cleanup if over limit
+            if os.path.exists(file_path):
+                os.remove(file_path)
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Dataset exceeds maximum row limit of {max_rows}"
             )
         
     except Exception as e:
+        # Cleanup on error
+        if os.path.exists(file_path):
+            os.remove(file_path)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Error parsing file: {str(e)}"
@@ -92,19 +121,16 @@ async def upload_dataset(
     # Store dataset in database
     db = get_database()
     
-    # Convert DataFrame to JSON for storage
-    dataset_json = df.to_json(orient='records')
-    
     dataset_doc = {
         "user_id": str(current_user["_id"]),
         "filename": file.filename,
         "original_filename": file.filename,
+        "file_path": file_path,  # Store file path
         "file_size": file_size,
         "file_type": file_ext.replace('.', ''),
         "num_rows": len(df),
         "num_columns": len(df.columns),
         "columns": [col.model_dump() for col in columns_info],
-        "data": dataset_json,  # Store actual data
         "uploaded_at": datetime.utcnow(),
         "is_analyzed": False
     }
@@ -193,20 +219,38 @@ async def delete_dataset(
     db = get_database()
     
     try:
+        # Get dataset to find file path
+        dataset = await db.datasets.find_one({
+            "_id": ObjectId(dataset_id),
+            "user_id": str(current_user["_id"])
+        })
+        
+        if not dataset:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Dataset not found"
+            )
+            
+        # Delete from database
         result = await db.datasets.delete_one({
             "_id": ObjectId(dataset_id),
             "user_id": str(current_user["_id"])
         })
-    except:
+        
+        # Delete file from disk
+        file_path = dataset.get("file_path")
+        if file_path and os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except Exception as e:
+                print(f"Error deleting file {file_path}: {e}")
+                
+    except HTTPException:
+        raise
+    except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid dataset ID"
-        )
-    
-    if result.deleted_count == 0:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Dataset not found"
+            detail=f"Error deleting dataset: {str(e)}"
         )
     
     # Also delete associated analysis
