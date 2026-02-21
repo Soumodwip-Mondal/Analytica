@@ -3,12 +3,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import os
 from dotenv import load_dotenv
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 from utils.database import connect_to_mongo, close_mongo_connection
-from routes import auth, upload, analysis, chat
+from utils.limiter import limiter
 
 # Load environment variables
 load_dotenv()
+
+# Import routes
+from routes import auth, upload, analysis, chat
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -27,13 +32,18 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# Attach rate limiter to app
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         os.getenv("FRONTEND_URL", "http://localhost:5173"),
         "http://localhost:3000",
-        "http://localhost:5173"
+        "http://localhost:5173",
+        "http://localhost:5174",
     ],
     allow_credentials=True,
     allow_methods=["*"],

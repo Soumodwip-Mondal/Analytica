@@ -79,9 +79,10 @@ pip install -r requirements.txt
 
 # Configure environment variables
 # Edit backend/.env with your settings:
-# - MONGODB_URI
-# - GEMINI_API_KEY (already configured)
-# - JWT_SECRET_KEY (change in production)
+# - MONGODB_URI: MongoDB connection string
+# - GEMINI_API_KEY: Google Gemini API key (already configured)
+# - JWT_SECRET_KEY: Secret key for JWT tokens (change in production)
+# - CHAT_RATE_LIMIT: Rate limit for chat queries (default: "10/minute")
 ```
 
 #### 3. Frontend Setup
@@ -242,6 +243,10 @@ Analytica/
 - CORS configuration
 - Safe code execution sandbox for AI-generated queries
 - User data isolation in MongoDB
+- **API Rate Limiting**: Prevents API quota exhaustion (configurable via `CHAT_RATE_LIMIT`)
+  - Default: 10 chat queries per minute per user
+  - Returns HTTP 429 with `Retry-After` header when limit is exceeded
+  - Protects against abuse and controls AI API costs
 
 ## 🌟 Future Enhancements
 
@@ -251,7 +256,7 @@ Analytica/
 - [ ] Scheduled reports
 - [ ] Advanced chart customization
 - [ ] Data transformation pipeline
-- [ ] API rate limiting
+- [x] API rate limiting
 - [ ] Email notifications
 - [ ] Dark/Light theme toggle
 - [ ] Multi-language support
