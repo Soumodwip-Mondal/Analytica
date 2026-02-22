@@ -13,7 +13,7 @@ from utils.limiter import limiter
 load_dotenv()
 
 # Import routes
-from routes import auth, upload, analysis, chat
+from routes import auth, upload, analysis, chat, favicon
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -55,7 +55,7 @@ app.include_router(auth.router)
 app.include_router(upload.router)
 app.include_router(analysis.router)
 app.include_router(chat.router)
-
+app.include_router(favicon.router)
 @app.get("/")
 async def root():
     """Root endpoint"""

@@ -12,6 +12,7 @@ import Navbar from './components/Navbar'
 import ParticleBackground from './components/ParticleBackground'
 import LoginModal from './components/LoginModal'
 import RegisterModal from './components/RegisterModal'
+import OAuthCallback from './pages/OAuthCallback'
 
 function PrivateRoute({ children }) {
     const { token } = useAuth()
@@ -65,6 +66,7 @@ function App() {
                     {/* Legacy routes for direct access */}
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/oauth/callback" element={<OAuthCallback />} />
 
                     <Route path="/upload" element={
                         <PrivateRoute><Upload /></PrivateRoute>

@@ -31,7 +31,9 @@ class UserLogin(BaseModel):
 
 class User(UserBase):
     id: str = Field(default_factory=lambda: str(ObjectId()), alias="_id")
-    hashed_password: str
+    hashed_password: Optional[str] = None
+    github_id: Optional[str] = None
+    avatar_url: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     is_active: bool = True
 
