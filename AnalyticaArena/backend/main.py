@@ -40,11 +40,13 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "https://analytica-seven.vercel.app",           # production frontend
         os.getenv("FRONTEND_URL", "http://localhost:5173"),
         "http://localhost:3000",
         "http://localhost:5173",
         "http://localhost:5174",
     ],
+    allow_origin_regex=r"https://analytica-seven.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
