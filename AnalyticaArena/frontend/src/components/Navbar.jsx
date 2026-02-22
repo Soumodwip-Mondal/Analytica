@@ -1,9 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useTheme } from "../context/ThemeContext"
 
 export default function Navbar() {
     const { logout } = useAuth()
     const navigate = useNavigate()
+    const { theme, toggleTheme } = useTheme()
 
     const handleLogout = () => {
         logout()
@@ -28,9 +30,14 @@ export default function Navbar() {
                             </Link>
                         </div>
                     </div>
-                    <button onClick={handleLogout} className="btn-secondary text-sm py-2 px-6">
-                        🚪 Logout
-                    </button>
+                    <div className="flex items-center space-x-4">
+                        <button onClick={handleLogout} className="btn-secondary text-sm py-2 px-6">
+                            🚪 Logout
+                        </button>
+                        <button onClick={toggleTheme} title="Toggle theme" className='btn-secondary text-sm py-2 px-4'>
+                            {theme === 'dark' ? '☀️' : '🌙'}
+                        </button>
+                    </div>
                 </div>
             </div>
         </nav>

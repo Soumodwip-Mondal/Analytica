@@ -1,4 +1,5 @@
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts'
+import { useTheme } from '../context/ThemeContext'
 
 const COLORS = ['#f97316', '#ea580c', '#fb923c', '#ec4899', '#f472b6', '#fb7185', '#fdba74', '#c2410c']
 
@@ -19,6 +20,13 @@ const CustomTooltip = ({ active, payload, label }) => {
 }
 
 export default function ChartCard({ chart }) {
+    const { theme } = useTheme()
+
+    // Dynamic colors for Recharts SVG props based on the current theme
+    const gridColor = theme === 'dark' ? '#334155' : '#d1d5db'
+    const axisColor = theme === 'dark' ? '#94a3b8' : '#374151'
+    const legendColor = theme === 'dark' ? '#cbd5e1' : '#111827'
+
     if (!chart || !chart.data || chart.data.length === 0) {
         return (
             <div className="glass-card p-6">
@@ -33,11 +41,11 @@ export default function ChartCard({ chart }) {
                 return (
                     <ResponsiveContainer width="100%" height={300}>
                         <BarChart data={chart.data}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
-                            <XAxis dataKey="x" stroke="#94a3b8" style={{ fontSize: '12px' }} />
-                            <YAxis stroke="#94a3b8" style={{ fontSize: '12px' }} />
+                            <CartesianGrid strokeDasharray="3 3" stroke={gridColor} opacity={0.6} />
+                            <XAxis dataKey="x" stroke={axisColor} style={{ fontSize: '12px' }} />
+                            <YAxis stroke={axisColor} style={{ fontSize: '12px' }} />
                             <Tooltip content={<CustomTooltip />} />
-                            <Legend wrapperStyle={{ color: '#cbd5e1', fontSize: '12px' }} />
+                            <Legend wrapperStyle={{ color: legendColor, fontSize: '12px' }} />
                             <Bar dataKey="y" fill="#f97316" radius={[8, 8, 0, 0]} />
                         </BarChart>
                     </ResponsiveContainer>
@@ -47,11 +55,11 @@ export default function ChartCard({ chart }) {
                 return (
                     <ResponsiveContainer width="100%" height={300}>
                         <LineChart data={chart.data}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
-                            <XAxis dataKey="x" stroke="#94a3b8" style={{ fontSize: '12px' }} />
-                            <YAxis stroke="#94a3b8" style={{ fontSize: '12px' }} />
+                            <CartesianGrid strokeDasharray="3 3" stroke={gridColor} opacity={0.6} />
+                            <XAxis dataKey="x" stroke={axisColor} style={{ fontSize: '12px' }} />
+                            <YAxis stroke={axisColor} style={{ fontSize: '12px' }} />
                             <Tooltip content={<CustomTooltip />} />
-                            <Legend wrapperStyle={{ color: '#cbd5e1', fontSize: '12px' }} />
+                            <Legend wrapperStyle={{ color: legendColor, fontSize: '12px' }} />
                             <Line type="monotone" dataKey="y" stroke="#f97316" strokeWidth={3} dot={{ fill: '#f97316', r: 5 }} activeDot={{ r: 7 }} />
                         </LineChart>
                     </ResponsiveContainer>
@@ -84,11 +92,11 @@ export default function ChartCard({ chart }) {
                 return (
                     <ResponsiveContainer width="100%" height={300}>
                         <ScatterChart>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
-                            <XAxis dataKey="x" stroke="#94a3b8" name={chart.x_column} style={{ fontSize: '12px' }} />
-                            <YAxis dataKey="y" stroke="#94a3b8" name={chart.y_column} style={{ fontSize: '12px' }} />
+                            <CartesianGrid strokeDasharray="3 3" stroke={gridColor} opacity={0.6} />
+                            <XAxis dataKey="x" stroke={axisColor} name={chart.x_column} style={{ fontSize: '12px' }} />
+                            <YAxis dataKey="y" stroke={axisColor} name={chart.y_column} style={{ fontSize: '12px' }} />
                             <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: '3 3' }} />
-                            <Legend wrapperStyle={{ color: '#cbd5e1', fontSize: '12px' }} />
+                            <Legend wrapperStyle={{ color: legendColor, fontSize: '12px' }} />
                             <Scatter name="Data Points" data={chart.data} fill="#fb923c" />
                         </ScatterChart>
                     </ResponsiveContainer>
@@ -98,9 +106,9 @@ export default function ChartCard({ chart }) {
                 return (
                     <ResponsiveContainer width="100%" height={300}>
                         <BarChart data={chart.data}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
-                            <XAxis dataKey="x" stroke="#94a3b8" style={{ fontSize: '12px' }} />
-                            <YAxis stroke="#94a3b8" style={{ fontSize: '12px' }} />
+                            <CartesianGrid strokeDasharray="3 3" stroke={gridColor} opacity={0.6} />
+                            <XAxis dataKey="x" stroke={axisColor} style={{ fontSize: '12px' }} />
+                            <YAxis stroke={axisColor} style={{ fontSize: '12px' }} />
                             <Tooltip content={<CustomTooltip />} />
                             <Bar dataKey="y" fill="#ea580c" radius={[8, 8, 0, 0]} />
                         </BarChart>
