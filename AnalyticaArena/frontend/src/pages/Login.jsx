@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authAPI } from '../services/api'
+import { extractErrorMessage } from '../utils/errorUtils'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
@@ -21,7 +22,7 @@ export default function Login() {
             login(response.data.access_token)
             navigate('/upload')
         } catch (err) {
-            setError(err.response?.data?.detail || 'Login failed')
+            setError(extractErrorMessage(err, 'Login failed'))
         } finally {
             setIsLoading(false)
         }

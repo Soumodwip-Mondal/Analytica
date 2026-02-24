@@ -1,8 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useAuth } from './context/AuthContext'
-import Login from './pages/Login'
-import Register from './pages/Register'
 import Upload from './pages/Upload'
 import Dashboard from './pages/Dashboard'
 import ChatPage from './pages/ChatPage'
@@ -64,10 +62,6 @@ function App() {
             <div className={`min-h-screen relative overflow-x-hidden flex flex-col transition-colors duration-300 fade-in-up ${token ? "pt-16" : ""}`}>
 
                 <Routes>
-                    {/* Legacy routes for direct access */}
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-
                     <Route path="/upload" element={
                         <PrivateRoute><Upload /></PrivateRoute>
                     } />

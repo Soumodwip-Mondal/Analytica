@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { authAPI } from '../services/api'
+import { extractErrorMessage } from '../utils/errorUtils'
 import { useAuth } from '../context/AuthContext'
 
 export default function RegisterModal({ isOpen, onClose, onSwitchToLogin }) {
@@ -47,8 +48,8 @@ export default function RegisterModal({ isOpen, onClose, onSwitchToLogin }) {
                 throw new Error('Invalid response from server')
             }
         } catch (err) {
-            console.error('Registration full error:', err)
-            setError(err.response?.data?.detail || err.message || 'Registration failed')
+            console.error('Registration error:', err)
+            setError(extractErrorMessage(err, 'Registration failed'))
         } finally {
             setIsLoading(false)
         }

@@ -42,10 +42,12 @@ export default function UploadBox({ onUpload, isUploading }) {
     return (
         <div className="w-full flex flex-col gap-4">
             {/* Drop zone */}
-            <div className="relative group cursor-pointer">
-                <div className={`absolute -inset-1 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl blur transition duration-500 ${dragActive ? 'opacity-50' : 'opacity-25 group-hover:opacity-50'}`}></div>
+            <div className="relative group cursor-pointer w-full">
+                {/* Ambient glow backdrop */}
+                <div className={`absolute -inset-2 bg-gradient-to-r from-orange-500/10 via-pink-500/10 to-orange-500/10 rounded-[2.5rem] blur-2xl transition-all duration-1000 opacity-60 group-hover:opacity-100 group-hover:scale-105`}></div>
+
                 <div
-                    className={`relative w-full h-64 glass-card flex flex-col items-center justify-center transition-all duration-300 p-8 ${dragActive ? 'scale-[1.01]' : ''}`}
+                    className={`relative w-full h-72 upload-zone-glass flex flex-col items-center justify-center transition-all duration-500 p-8 ${dragActive ? 'border-orange-500/50 bg-orange-500/10 scale-[1.01]' : ''}`}
                     onDragEnter={handleDrag}
                     onDragLeave={handleDrag}
                     onDragOver={handleDrag}
@@ -68,8 +70,8 @@ export default function UploadBox({ onUpload, isUploading }) {
                         </div>
                     ) : (
                         <>
-                            <div className="bg-orange-500/10 p-4 rounded-full mb-4 group-hover:scale-110 transition-transform duration-300">
-                                <span className="material-symbols-outlined text-orange-500 text-4xl">cloud_upload</span>
+                            <div className="bg-orange-500/5 dark:bg-orange-500/10 p-5 rounded-3xl mb-4 group-hover:scale-110 group-hover:bg-orange-500/10 transition-all duration-500">
+                                <span className="material-symbols-outlined text-orange-500 text-5xl">cloud_upload</span>
                             </div>
                             <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">Drop your CSV/Excel file here</h3>
                             <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">or click to browse from your computer</p>

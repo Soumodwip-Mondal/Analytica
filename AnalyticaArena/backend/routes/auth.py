@@ -65,6 +65,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 @router.post("/register", response_model=Token)
 async def register(user: UserCreate):
     """Register a new user"""
+    print(f"📝 Registration attempt for: {user.email}")
     db = get_database()
     
     # Check if user already exists

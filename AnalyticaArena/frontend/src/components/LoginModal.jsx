@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { authAPI } from '../services/api'
+import { extractErrorMessage } from '../utils/errorUtils'
 import { useAuth } from '../context/AuthContext'
 
 export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
@@ -35,7 +36,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
             navigate('/upload')
         } catch (err) {
             console.error('Login error:', err)
-            setError(err.response?.data?.detail || 'Login failed')
+            setError(extractErrorMessage(err, 'Login failed'))
         } finally {
             setIsLoading(false)
         }

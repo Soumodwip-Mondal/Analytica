@@ -1,7 +1,13 @@
 import google.generativeai as genai
 import os
 import json
+import logging
 from typing import Dict, Any, List
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 from utils.prompts import (
     fill_insight_prompt,
     fill_nl_to_code_prompt,
@@ -13,7 +19,7 @@ class AIService:
     def __init__(self):
         self.api_key = os.getenv("GEMINI_API_KEY")
         if not self.api_key:
-            print("⚠️ Warning: GEMINI_API_KEY not found. AI features will be disabled.")
+            logger.warning("GEMINI_API_KEY not found. AI features will be disabled.")
             self.model = None
             return
         
@@ -48,7 +54,7 @@ class AIService:
             return insights
             
         except json.JSONDecodeError as e:
-            print(f"Failed to parse AI response as JSON: {e}")
+            logger.error(f"Failed to parse AI response as JSON: {e}")
             # Return fallback insights
             return [{
                 "title": "Dataset Overview",
@@ -85,7 +91,7 @@ class AIService:
             return result
             
         except Exception as e:
-            print(f"Error converting NL to code: {e}")
+            logger.error(f"Error converting NL to code: {e}")
             return {
                 "code": None,
                 "needs_chart": False,
@@ -116,7 +122,7 @@ class AIService:
             return charts
             
         except Exception as e:
-            print(f"Error suggesting charts: {e}")
+            logger.error(f"Error suggesting charts: {e}")
             return []
     
     async def generate_report(self, dataset_name: str, statistics: str, 
@@ -134,7 +140,7 @@ class AIService:
             return response.text
             
         except Exception as e:
-            print(f"Error generating report: {e}")
+            logger.error(f"Error generating report: {e}")
             return f"# Analysis Report\n\nError generating report: {str(e)}"
 
 # Singleton instance

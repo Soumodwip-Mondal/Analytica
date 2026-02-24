@@ -13,7 +13,6 @@ api.interceptors.request.use(
         if (token) {
             config.headers.Authorization = `Bearer ${token}`
         }
-        console.log(`🚀 API Request: ${config.method.toUpperCase()} ${config.baseURL}${config.url}`)
         return config
     },
     (error) => Promise.reject(error)
@@ -26,7 +25,9 @@ export const authAPI = {
         const params = new URLSearchParams()
         params.append('username', email)
         params.append('password', password)
-        return api.post('/api/auth/login', params)
+        return api.post('/api/auth/login', params, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
     },
     getCurrentUser: () => api.get('/api/auth/me'),
 }

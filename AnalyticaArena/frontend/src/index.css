@@ -356,6 +356,7 @@
         transparent 100%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     mask-composite: exclude;
     animation: shimmer-rotate 4s linear infinite;
     pointer-events: none;
@@ -439,6 +440,39 @@
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: rgba(249, 115, 22, 0.6);
+  }
+
+  /* Upload Zone Glass */
+  .upload-zone-glass {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 2px dashed rgba(203, 213, 225, 0.4);
+    border-radius: 1.5rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  html.dark .upload-zone-glass {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.2),
+      0 0 15px rgba(249, 115, 22, 0.05),
+      /* Subtle orange glow */
+      0 0 30px rgba(219, 39, 119, 0.02);
+    /* Subtle pink glow */
+  }
+
+  .upload-zone-glass:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(249, 115, 22, 0.4);
+    transform: translateY(-2px) scale(1.005);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.2),
+      0 0 20px rgba(249, 115, 22, 0.15),
+      /* Brighter orange glow */
+      0 0 40px rgba(219, 39, 119, 0.1);
+    /* Brighter pink glow */
   }
 }
 
