@@ -2,17 +2,42 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useState, useRef, useEffect } from 'react'
 
+// Theme toggle helper
+function toggleTheme() {
+    const isDark = document.documentElement.classList.toggle('dark')
+    localStorage.theme = isDark ? 'dark' : 'light'
+}
+
 export default function Navbar() {
     const { logout, user } = useAuth()
     const navigate = useNavigate()
     const location = useLocation()
     const [showUserMenu, setShowUserMenu] = useState(false)
+    const [isDark, setIsDark] = useState(document.documentElement.classList.contains('dark'))
     const menuRef = useRef(null)
 
     const handleLogout = () => {
         logout()
         navigate('/login')
     }
+
+    const handleThemeToggle = () => {
+        toggleTheme()
+        setIsDark(document.documentElement.classList.contains('dark'))
+    }
+
+    // Sync isDark when dark class is modified outside
+    useEffect(() => {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    setIsDark(document.documentElement.classList.contains('dark'))
+                }
+            })
+        })
+        observer.observe(document.documentElement, { attributes: true })
+        return () => observer.disconnect()
+    }, [])
 
     // Close menu on outside click
     useEffect(() => {
@@ -27,21 +52,27 @@ export default function Navbar() {
 
     const navLinks = [
         { path: '/upload', label: 'Dashboard' },
-        { path: '/reports', label: 'Projects' },
+        { path: '/reports', label: 'Reports' },
     ]
 
     const isActive = (path) => location.pathname === path
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 border-b border-slate-700/50 backdrop-blur-xl">
+        <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+            style={{
+                backdropFilter: 'blur(24px)',
+                WebkitBackdropFilter: 'blur(24px)',
+                background: isDark ? 'rgba(15, 23, 42, 0.2)' : 'rgba(255, 255, 255, 0.2)',
+                borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.05)',
+            }}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     {/* Left: Logo */}
                     <Link to="/upload" className="flex items-center space-x-2.5 group">
-                        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center shadow-lg shadow-orange-500/20 group-hover:shadow-orange-500/40 transition-all">
-                            <span className="text-white text-lg">🔥</span>
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-rose-500 flex items-center justify-center shadow-md shadow-orange-500/20 group-hover:shadow-orange-500/40 transition-all">
+                            <span className="material-symbols-outlined text-white text-[18px]">analytics</span>
                         </div>
-                        <span className="text-xl font-bold text-white tracking-tight">Analytica</span>
+                        <span className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Analytica</span>
                     </Link>
 
                     {/* Center: Nav Links */}
@@ -51,65 +82,72 @@ export default function Navbar() {
                                 key={link.path}
                                 to={link.path}
                                 className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${isActive(link.path)
-                                        ? 'text-white'
-                                        : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                                    ? 'text-primary bg-orange-50 dark:bg-orange-500/10'
+                                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50'
                                     }`}
                             >
                                 {link.label}
                                 {isActive(link.path) && (
-                                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-gradient-to-r from-orange-500 to-rose-500 rounded-full"></span>
+                                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-0.5 bg-primary rounded-full"></span>
                                 )}
                             </Link>
                         ))}
                     </div>
 
-                    {/* Right: Notification + Avatar */}
+                    {/* Right: Theme Toggle + Avatar */}
                     <div className="flex items-center space-x-3">
-                        {/* Notification bell */}
-                        <button className="relative p-2 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all">
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                            </svg>
-                            {/* Notification dot */}
-                            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-orange-500 rounded-full"></span>
+                        {/* Theme toggle */}
+                        <button
+                            onClick={handleThemeToggle}
+                            aria-label="Toggle theme"
+                            className="p-2 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-all"
+                        >
+                            {isDark ? (
+                                <span className="material-symbols-outlined text-yellow-400 text-[20px]">light_mode</span>
+                            ) : (
+                                <span className="material-symbols-outlined text-[20px]">dark_mode</span>
+                            )}
                         </button>
 
                         {/* User Avatar + Dropdown */}
                         <div className="relative" ref={menuRef}>
                             <button
                                 onClick={() => setShowUserMenu(!showUserMenu)}
-                                className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white text-sm font-semibold border-2 border-transparent hover:border-purple-400/50 transition-all shadow-lg shadow-purple-500/20"
+                                className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-sm font-semibold hover:ring-2 hover:ring-indigo-400/50 transition-all shadow-md"
                             >
                                 {user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
                             </button>
 
                             {/* Dropdown menu */}
                             {showUserMenu && (
-                                <div className="absolute right-0 mt-2 w-48 rounded-xl bg-slate-800 border border-slate-700/50 shadow-2xl shadow-black/50 py-1 fade-in-up">
-                                    <div className="px-4 py-3 border-b border-slate-700/50">
-                                        <p className="text-sm text-white font-medium truncate">{user?.name || 'User'}</p>
+                                <div className="absolute right-0 mt-2 w-52 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 shadow-2xl shadow-black/10 dark:shadow-black/50 py-1.5 fade-in-up overflow-hidden">
+                                    <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700/50">
+                                        <p className="text-sm text-slate-900 dark:text-white font-semibold truncate">{user?.name || 'User'}</p>
                                         <p className="text-xs text-slate-400 truncate">{user?.email || ''}</p>
                                     </div>
                                     <Link
                                         to="/upload"
-                                        className="block px-4 py-2.5 text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 transition-colors"
+                                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:text-primary hover:bg-orange-50 dark:hover:bg-slate-700/50 transition-colors"
                                         onClick={() => setShowUserMenu(false)}
                                     >
-                                        📁 Upload
+                                        <span className="material-symbols-outlined text-[18px]">cloud_upload</span>
+                                        Upload Data
                                     </Link>
                                     <Link
                                         to="/reports"
-                                        className="block px-4 py-2.5 text-sm text-slate-300 hover:text-white hover:bg-slate-700/50 transition-colors"
+                                        className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:text-primary hover:bg-orange-50 dark:hover:bg-slate-700/50 transition-colors"
                                         onClick={() => setShowUserMenu(false)}
                                     >
-                                        📊 Reports
+                                        <span className="material-symbols-outlined text-[18px]">description</span>
+                                        Reports
                                     </Link>
-                                    <div className="border-t border-slate-700/50 mt-1">
+                                    <div className="border-t border-slate-100 dark:border-slate-700/50 mt-1">
                                         <button
                                             onClick={handleLogout}
-                                            className="w-full text-left px-4 py-2.5 text-sm text-rose-400 hover:text-rose-300 hover:bg-slate-700/50 transition-colors"
+                                            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-rose-500 hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-slate-700/50 transition-colors"
                                         >
-                                            🚪 Sign out
+                                            <span className="material-symbols-outlined text-[18px]">logout</span>
+                                            Sign out
                                         </button>
                                     </div>
                                 </div>

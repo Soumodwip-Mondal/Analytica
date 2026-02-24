@@ -2,61 +2,77 @@ export default function DataPreview({ preview }) {
     if (!preview || !preview.rows || !preview.columns) return null
 
     return (
-        <div className="glass-card p-6 fade-in-up">
-            <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-white flex items-center space-x-2">
-                    <span>📋</span>
-                    <span className="gradient-text">Data Preview</span>
-                </h3>
-                <span className="text-sm text-slate-400 bg-slate-800/50 px-3 py-1 rounded-lg border border-slate-700/50">
-                    Showing {preview.rows.length} of {preview.total_rows?.toLocaleString()} rows
-                </span>
+        <div className="w-full fade-in-up">
+            {/* Section header */}
+            <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span className="material-symbols-outlined text-orange-500">table_chart</span>
+                    Data Preview
+                </h2>
+                <div className="flex gap-2">
+                    <button className="p-1.5 hover:bg-slate-100 dark:hover:bg-white/10 rounded-lg text-slate-500 transition-colors">
+                        <span className="material-symbols-outlined text-sm">close</span>
+                    </button>
+                </div>
             </div>
 
-            <div className="overflow-x-auto rounded-lg border border-slate-700/50">
-                <table className="w-full text-sm">
-                    <thead>
-                        <tr className="bg-slate-800/60 border-b border-slate-700/50">
-                            <th className="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                                #
-                            </th>
-                            {preview.columns.map((col) => (
-                                <th
-                                    key={col}
-                                    className="px-4 py-3 text-left text-xs font-semibold text-blue-400 uppercase tracking-wider whitespace-nowrap"
-                                >
-                                    {col}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {preview.rows.map((row, rowIndex) => (
-                            <tr
-                                key={rowIndex}
-                                className={`border-b border-slate-700/30 transition-colors hover:bg-slate-800/40 ${rowIndex % 2 === 0 ? 'bg-slate-900/20' : 'bg-slate-800/10'
-                                    }`}
-                            >
-                                <td className="px-4 py-3 text-slate-500 font-mono text-xs">
-                                    {rowIndex + 1}
-                                </td>
+            {/* Table */}
+            <div className="w-full overflow-hidden glass-card shadow-2xl">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm text-slate-600 dark:text-slate-300">
+                        <thead className="bg-slate-50 dark:bg-white/5 text-xs uppercase font-semibold text-slate-700 dark:text-slate-200 border-b border-slate-200 dark:border-white/10">
+                            <tr>
                                 {preview.columns.map((col) => (
-                                    <td
-                                        key={col}
-                                        className="px-4 py-3 text-slate-300 whitespace-nowrap max-w-[200px] truncate"
-                                        title={String(row[col] ?? '')}
-                                    >
-                                        {row[col] === null || row[col] === undefined ? (
-                                            <span className="text-slate-600 italic">null</span>
-                                        ) : (
-                                            String(row[col])
-                                        )}
-                                    </td>
+                                    <th key={col} className="px-6 py-4" scope="col">
+                                        {col}
+                                    </th>
                                 ))}
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody className="divide-y divide-slate-200 dark:divide-white/5">
+                            {preview.rows.map((row, rowIndex) => (
+                                <tr
+                                    key={rowIndex}
+                                    className={`hover:bg-slate-50 dark:hover:bg-white/5 transition-colors ${rowIndex === preview.rows.length - 1 ? 'opacity-60' : ''}`}
+                                >
+                                    {preview.columns.map((col) => {
+                                        const val = row[col]
+                                        const isNull = val === null || val === undefined
+                                        // Detect status-like columns for badge treatment
+                                        const strVal = String(val ?? '')
+                                        const isStatus = ['completed', 'pending', 'failed', 'success', 'error', 'active', 'inactive'].includes(strVal.toLowerCase())
+                                        let badgeClass = ''
+                                        if (isStatus) {
+                                            if (['completed', 'success', 'active'].includes(strVal.toLowerCase())) badgeClass = 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                            else if (['pending'].includes(strVal.toLowerCase())) badgeClass = 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+                                            else badgeClass = 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                                        }
+                                        return (
+                                            <td key={col} className="px-6 py-4 font-medium text-slate-900 dark:text-slate-200 max-w-[200px] truncate" title={strVal}>
+                                                {isNull ? (
+                                                    <span className="text-slate-400 italic text-xs">null</span>
+                                                ) : isStatus ? (
+                                                    <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${badgeClass}`}>{strVal}</span>
+                                                ) : (
+                                                    strVal
+                                                )}
+                                            </td>
+                                        )
+                                    })}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                {/* Footer */}
+                <div className="px-6 py-3 bg-slate-50/50 dark:bg-white/5 border-t border-slate-200 dark:border-white/10 flex justify-between items-center">
+                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                        Showing {preview.rows.length} of {preview.total_rows?.toLocaleString()} rows
+                    </span>
+                    <button className="text-xs text-orange-500 hover:text-orange-600 font-medium transition-colors">
+                        View Full Table
+                    </button>
+                </div>
             </div>
         </div>
     )
