@@ -277,7 +277,34 @@
   }
 
   .animate-text-reveal {
-    animation: text-reveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: text-reveal-continuous 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+
+  @keyframes text-reveal-continuous {
+
+    0%,
+    5% {
+      opacity: 0;
+      filter: blur(10px);
+      transform: translateY(15px);
+      letter-spacing: -0.02em;
+    }
+
+    15%,
+    85% {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+      letter-spacing: normal;
+    }
+
+    95%,
+    100% {
+      opacity: 0;
+      filter: blur(10px);
+      transform: translateY(-15px);
+      letter-spacing: -0.02em;
+    }
   }
 
   /* Typewriter effect */
@@ -290,17 +317,25 @@
     width: 0;
     max-width: fit-content;
     animation:
-      typing 2.5s steps(30, end) forwards,
+      typing 6s steps(30, end) infinite,
       blink .75s step-end infinite;
   }
 
   @keyframes typing {
-    from {
+
+    0%,
+    10% {
       width: 0
     }
 
-    to {
+    30%,
+    80% {
       width: 100%
+    }
+
+    90%,
+    100% {
+      width: 0
     }
   }
 
