@@ -184,6 +184,57 @@ async def get_dataset_details(
         "analysis_id": dataset.get("analysis_id")
     }
 
+@router.get("/dataset/{dataset_id}/preview")
+async def get_dataset_preview(
+    dataset_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get a preview of the first 10 rows of a dataset"""
+    db = get_database()
+    
+    try:
+        dataset = await db.datasets.find_one({
+            "_id": ObjectId(dataset_id),
+            "user_id": str(current_user["_id"])
+        })
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid dataset ID"
+        )
+    
+    if not dataset:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Dataset not found"
+        )
+    
+    # Parse stored data and return first 10 rows
+    try:
+        import json
+        data = json.loads(dataset["data"])
+        preview_rows = data[:10]
+        columns = list(preview_rows[0].keys()) if preview_rows else []
+        
+        # Safe serialize all values
+        safe_rows = []
+        for row in preview_rows:
+            safe_row = {k: safe_serialize(v) for k, v in row.items()}
+            safe_rows.append(safe_row)
+        
+        return {
+            "columns": columns,
+            "rows": safe_rows,
+            "total_rows": dataset["num_rows"],
+            "num_columns": dataset["num_columns"],
+            "filename": dataset["filename"]
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error generating preview: {str(e)}"
+        )
+
 @router.delete("/dataset/{dataset_id}")
 async def delete_dataset(
     dataset_id: str,

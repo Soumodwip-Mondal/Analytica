@@ -32,9 +32,7 @@ export default function Dashboard() {
                 setAnalysis(analysisResponse.data)
             } catch (err) {
                 if (err.response?.status === 404) {
-                    // Analysis not found, trigger it
-                    const newAnalysis = await analysisAPI.analyzeDataset(datasetId)
-                    setAnalysis(newAnalysis.data)
+                    setError('This dataset has not been analyzed yet. Go to Upload page and click "Analyze Dataset".')
                 } else {
                     throw err
                 }

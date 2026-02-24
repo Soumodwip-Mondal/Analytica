@@ -76,13 +76,10 @@ export default function UploadBox({ onUpload, isUploading }) {
                     <p className="text-slate-400 text-lg mb-3">
                         or click to browse
                     </p>
-                    <div className="inline-flex items-center space-x-2 bg-slate-800/40 px-4 py-2 rounded-lg border border-slate-700/50 mt-4">
-                        <span className="text-sm text-slate-300">Supported formats:</span>
-                        <span className="text-sm font-semibold text-blue-400">CSV</span>
-                        <span className="text-slate-600">•</span>
-                        <span className="text-sm font-semibold text-emerald-400">Excel</span>
-                        <span className="text-slate-600">•</span>
-                        <span className="text-sm font-semibold text-purple-400">JSON</span>
+                    <div className="inline-flex items-center space-x-2 mt-4">
+                        <span className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">.csv</span>
+                        <span className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20">.json</span>
+                        <span className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">.xlsx</span>
                     </div>
                 </div>
             )}

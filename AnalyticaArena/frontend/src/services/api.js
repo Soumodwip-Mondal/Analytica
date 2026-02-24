@@ -41,6 +41,7 @@ export const uploadAPI = {
     },
     getDatasets: () => api.get('/api/upload/datasets'),
     getDatasetDetails: (datasetId) => api.get(`/api/upload/dataset/${datasetId}`),
+    getDatasetPreview: (datasetId) => api.get(`/api/upload/dataset/${datasetId}/preview`),
     deleteDataset: (datasetId) => api.delete(`/api/upload/dataset/${datasetId}`),
 }
 
