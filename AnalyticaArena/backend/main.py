@@ -30,7 +30,9 @@ app.add_middleware(
     allow_origins=[
         os.getenv("FRONTEND_URL", "http://localhost:5173"),
         "http://localhost:3000",
-        "http://localhost:5173"
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:3000"
     ],
     allow_origin_regex=r"https://analytica-seven.*\.vercel\.app",
     allow_credentials=True,

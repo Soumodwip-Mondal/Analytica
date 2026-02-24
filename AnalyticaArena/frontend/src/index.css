@@ -3,6 +3,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 /* ============================================
    BASE STYLES
    ============================================ */
@@ -259,6 +260,148 @@
     }
   }
 
+  @keyframes text-reveal {
+    0% {
+      opacity: 0;
+      filter: blur(10px);
+      transform: translateY(15px);
+      letter-spacing: -0.02em;
+    }
+
+    100% {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0);
+      letter-spacing: normal;
+    }
+  }
+
+  .animate-text-reveal {
+    animation: text-reveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  /* Typewriter effect */
+  .typewriter-text {
+    display: inline-block;
+    overflow: hidden;
+    border-right: 3px solid #f97316;
+    white-space: nowrap;
+    margin: 0 auto;
+    width: 0;
+    max-width: fit-content;
+    animation:
+      typing 2.5s steps(30, end) forwards,
+      blink .75s step-end infinite;
+  }
+
+  @keyframes typing {
+    from {
+      width: 0
+    }
+
+    to {
+      width: 100%
+    }
+  }
+
+  @keyframes blink {
+
+    from,
+    to {
+      border-color: transparent
+    }
+
+    50% {
+      border-color: #f97316
+    }
+  }
+
+  @keyframes slow-pan {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  .bg-animate-gradient {
+    background-size: 200% 200% !important;
+    animation: slow-pan 12s ease infinite !important;
+  }
+
+  /* Shimmering thin border effect */
+  .shimmer-button {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px;
+    /* Thin border */
+    background: conic-gradient(from var(--shimmer-angle, 0deg),
+        transparent 0%,
+        rgba(249, 115, 22, 0) 20%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(219, 39, 119, 0) 80%,
+        transparent 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: shimmer-rotate 4s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Background shimmer sweep */
+  .shimmer-button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+        transparent 45%,
+        rgba(255, 255, 255, 0.15) 50%,
+        transparent 55%);
+    transform: rotate(-45deg);
+    animation: shimmer-sweep 3s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes shimmer-rotate {
+    to {
+      --shimmer-angle: 360deg;
+    }
+  }
+
+  @keyframes shimmer-sweep {
+    0% {
+      transform: translate(-100%, -100%) rotate(-45deg);
+    }
+
+    100% {
+      transform: translate(100%, 100%) rotate(-45deg);
+    }
+  }
+
+  @property --shimmer-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
   /* Card hover */
   .card-hover {
     transition: all 0.3s ease;
@@ -394,37 +537,38 @@
 
 /* Stagger animations */
 .stagger-item {
-  animation: stagger 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  opacity: 0;
+  animation: stagger 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .stagger-item:nth-child(1) {
-  animation-delay: 0.05s;
-}
-
-.stagger-item:nth-child(2) {
   animation-delay: 0.1s;
 }
 
-.stagger-item:nth-child(3) {
-  animation-delay: 0.15s;
-}
-
-.stagger-item:nth-child(4) {
+.stagger-item:nth-child(2) {
   animation-delay: 0.2s;
 }
 
+.stagger-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.stagger-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
 .stagger-item:nth-child(5) {
-  animation-delay: 0.25s;
+  animation-delay: 0.5s;
 }
 
 .stagger-item:nth-child(6) {
-  animation-delay: 0.3s;
+  animation-delay: 0.6s;
 }
 
 @keyframes stagger {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
 
   to {
@@ -467,6 +611,24 @@
   }
 }
 
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.25;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
+
 /* Modal pop animation */
 .animate-modal-pop {
   animation: modalPop 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -488,6 +650,7 @@
    LIGHT MODE UTILITY OVERRIDES (from main)
    ============================================ */
 @layer utilities {
+
   html:not(.dark) [class*="text-slate-"],
   html:not(.dark) [class*="text-gray-"],
   html:not(.dark) [class*="text-zinc-"] {

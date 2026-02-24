@@ -61,7 +61,7 @@ function App() {
         <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <ThemeBackground />
             {token && <Navbar />}
-            <div className={`min-h-screen relative overflow-x-hidden flex flex-col transition-colors duration-300 ${token ? "pt-16" : ""}`}>
+            <div className={`min-h-screen relative overflow-x-hidden flex flex-col transition-colors duration-300 fade-in-up ${token ? "pt-16" : ""}`}>
 
                 <Routes>
                     {/* Legacy routes for direct access */}

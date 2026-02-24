@@ -34,6 +34,7 @@ export default function LoginModal({ isOpen, onClose, onSwitchToRegister }) {
             onClose()
             navigate('/upload')
         } catch (err) {
+            console.error('Login error:', err)
             setError(err.response?.data?.detail || 'Login failed')
         } finally {
             setIsLoading(false)

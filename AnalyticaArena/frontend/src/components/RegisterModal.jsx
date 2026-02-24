@@ -32,12 +32,23 @@ export default function RegisterModal({ isOpen, onClose, onSwitchToLogin }) {
         if (formData.password.length < 8) { setError('Password must be at least 8 characters'); return }
         setIsLoading(true)
         try {
+            console.log('Attempting registration with:', { full_name: formData.full_name, email: formData.email })
             const response = await authAPI.register({ full_name: formData.full_name, email: formData.email, password: formData.password })
-            login(response.data.access_token)
-            onClose()
-            navigate('/upload')
+            console.log('Registration response received:', response.status)
+
+            if (response.data && response.data.access_token) {
+                console.log('Login being called with token')
+                login(response.data.access_token)
+                console.log('Login success, closing modal')
+                onClose()
+                navigate('/upload')
+            } else {
+                console.error('Invalid response structure:', response.data)
+                throw new Error('Invalid response from server')
+            }
         } catch (err) {
-            setError(err.response?.data?.detail || 'Registration failed')
+            console.error('Registration full error:', err)
+            setError(err.response?.data?.detail || err.message || 'Registration failed')
         } finally {
             setIsLoading(false)
         }

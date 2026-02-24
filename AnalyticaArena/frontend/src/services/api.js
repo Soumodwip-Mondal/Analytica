@@ -13,6 +13,7 @@ api.interceptors.request.use(
         if (token) {
             config.headers.Authorization = `Bearer ${token}`
         }
+        console.log(`🚀 API Request: ${config.method.toUpperCase()} ${config.baseURL}${config.url}`)
         return config
     },
     (error) => Promise.reject(error)
@@ -22,10 +23,10 @@ api.interceptors.request.use(
 export const authAPI = {
     register: (data) => api.post('/api/auth/register', data),
     login: (email, password) => {
-        const formData = new FormData()
-        formData.append('username', email)
-        formData.append('password', password)
-        return api.post('/api/auth/login', formData)
+        const params = new URLSearchParams()
+        params.append('username', email)
+        params.append('password', password)
+        return api.post('/api/auth/login', params)
     },
     getCurrentUser: () => api.get('/api/auth/me'),
 }

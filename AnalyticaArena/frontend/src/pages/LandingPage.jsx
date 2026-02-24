@@ -114,7 +114,7 @@ export default function LandingPage({ onOpenLogin, onOpenRegister }) {
 
                     {/* Heading group */}
                     <div className="flex flex-col items-center gap-3 sm:gap-4">
-                        <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05] pb-2"
+                        <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05] pb-2 animate-text-reveal"
                             style={{
                                 background: 'linear-gradient(to right, #f97316, #db2777)',
                                 WebkitBackgroundClip: 'text',
@@ -122,19 +122,21 @@ export default function LandingPage({ onOpenLogin, onOpenRegister }) {
                             }}>
                             Analytica
                         </h1>
-                        <h2 className={`text-2xl md:text-3xl font-medium ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
-                            AI-Powered Analytics Platform
-                        </h2>
-                        <p className={`max-w-2xl text-lg leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                        <div className="relative">
+                            <h2 className={`text-2xl md:text-3xl font-medium typewriter-text ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+                                AI-Powered Analytics Platform
+                            </h2>
+                        </div>
+                        <p className={`max-w-2xl text-lg leading-relaxed fade-in-up ${isDark ? 'text-slate-400' : 'text-slate-600'}`} style={{ animationDelay: '0.4s' }}>
                             Unlock the hidden potential of your data with our next-generation AI models. Visualize, predict, and act in real-time.
                         </p>
                     </div>
 
                     {/* CTA Buttons (always matches dark mode layout) */}
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full">
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full fade-in-up" style={{ animationDelay: '0.6s' }}>
                         <button
                             onClick={onOpenLogin}
-                            className="flex h-12 px-8 rounded-xl text-white text-base font-bold tracking-wide items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5"
+                            className="flex h-12 px-8 rounded-xl text-white text-base font-bold tracking-wide items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 shimmer-button"
                             style={{ background: 'linear-gradient(135deg, #f97316, #db2777)', boxShadow: '0 0 20px rgba(219,39,119,0.4)' }}
                         >
                             <span>Sign In</span>
@@ -153,7 +155,7 @@ export default function LandingPage({ onOpenLogin, onOpenRegister }) {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-[1100px] mx-auto relative z-10">
 
                     {/* Card 1: AI-Powered */}
-                    <div className={`group relative p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2
+                    <div className={`group relative p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2 stagger-item
                         ${isDark ? 'border-white/10 shadow-none hover:border-orange-500/30' : 'border border-slate-200/50 shadow-lg shadow-orange-500/5 hover:shadow-xl hover:border-orange-500/30'}`}
                         style={{
                             backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
@@ -187,7 +189,7 @@ export default function LandingPage({ onOpenLogin, onOpenRegister }) {
                     </div>
 
                     {/* Card 2: Visualizations */}
-                    <div className={`group relative p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2
+                    <div className={`group relative p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2 stagger-item
                         ${isDark ? 'border-white/10 shadow-none hover:border-pink-500/30' : 'border border-slate-200/50 shadow-lg shadow-pink-500/5 hover:shadow-xl hover:border-pink-500/30'}`}
                         style={{
                             backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
@@ -218,7 +220,7 @@ export default function LandingPage({ onOpenLogin, onOpenRegister }) {
                     </div>
 
                     {/* Card 3: Chat Interface */}
-                    <div className={`group relative p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2
+                    <div className={`group relative p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2 stagger-item
                         ${isDark ? 'border-white/10 shadow-none hover:border-orange-400/30' : 'border border-slate-200/50 shadow-lg shadow-orange-500/5 hover:shadow-xl hover:border-orange-400/30'}`}
                         style={{
                             backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
