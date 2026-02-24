@@ -2,87 +2,106 @@ import { useState, useRef } from 'react'
 
 export default function UploadBox({ onUpload, isUploading }) {
     const [dragActive, setDragActive] = useState(false)
+    const [uploadProgress, setUploadProgress] = useState(null) // { filename, progress }
     const fileInputRef = useRef(null)
 
     const handleDrag = (e) => {
         e.preventDefault()
         e.stopPropagation()
-        if (e.type === 'dragenter' || e.type === 'dragover') {
-            setDragActive(true)
-        } else if (e.type === 'dragleave') {
-            setDragActive(false)
-        }
+        if (e.type === 'dragenter' || e.type === 'dragover') setDragActive(true)
+        else if (e.type === 'dragleave') setDragActive(false)
+    }
+
+    const simulateProgress = (file) => {
+        setUploadProgress({ filename: file.name, size: (file.size / 1024 / 1024).toFixed(1), progress: 0 })
+        let p = 0
+        const interval = setInterval(() => {
+            p += Math.random() * 15
+            if (p >= 95) {
+                clearInterval(interval)
+                setUploadProgress(null)
+                onUpload(file)
+            } else {
+                setUploadProgress({ filename: file.name, size: (file.size / 1024 / 1024).toFixed(1), progress: Math.floor(p) })
+            }
+        }, 200)
     }
 
     const handleDrop = (e) => {
         e.preventDefault()
         e.stopPropagation()
         setDragActive(false)
-
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            onUpload(e.dataTransfer.files[0])
-        }
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) simulateProgress(e.dataTransfer.files[0])
     }
 
     const handleChange = (e) => {
         e.preventDefault()
-        if (e.target.files && e.target.files[0]) {
-            onUpload(e.target.files[0])
-        }
-    }
-
-    const handleClick = () => {
-        fileInputRef.current?.click()
+        if (e.target.files && e.target.files[0]) simulateProgress(e.target.files[0])
     }
 
     return (
-        <div
-            className={`glass-card p-16 text-center cursor-pointer transition-all duration-300 ${dragActive ? 'border-blue-400 bg-blue-500/10 scale-105 shadow-lg shadow-blue-500/20' : 'hover:border-blue-500/50 hover:bg-slate-800/40'
-                }`}
-            onDragEnter={handleDrag}
-            onDragLeave={handleDrag}
-            onDragOver={handleDrag}
-            onDrop={handleDrop}
-            onClick={handleClick}
-        >
-            <input
-                ref={fileInputRef}
-                type="file"
-                className="hidden"
-                onChange={handleChange}
-                accept=".csv,.xlsx,.xls,.json"
-                disabled={isUploading}
-            />
+        <div className="w-full flex flex-col gap-4">
+            {/* Drop zone */}
+            <div className="relative group cursor-pointer">
+                <div className={`absolute -inset-1 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl blur transition duration-500 ${dragActive ? 'opacity-50' : 'opacity-25 group-hover:opacity-50'}`}></div>
+                <div
+                    className={`relative w-full h-64 glass-card flex flex-col items-center justify-center transition-all duration-300 p-8 ${dragActive ? 'scale-[1.01]' : ''}`}
+                    onDragEnter={handleDrag}
+                    onDragLeave={handleDrag}
+                    onDragOver={handleDrag}
+                    onDrop={handleDrop}
+                    onClick={() => fileInputRef.current?.click()}
+                >
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        className="hidden"
+                        onChange={handleChange}
+                        accept=".csv,.xlsx,.xls,.json"
+                        disabled={isUploading || uploadProgress !== null}
+                    />
 
-            {isUploading ? (
-                <div className="flex flex-col items-center space-y-6">
-                    <div className="spinner"></div>
-                    <div className="space-y-2">
-                        <p className="text-slate-200 text-lg font-semibold">Uploading and analyzing...</p>
-                        <p className="text-slate-400 text-sm">This may take a few moments</p>
-                    </div>
+                    {isUploading ? (
+                        <div className="flex flex-col items-center gap-4">
+                            <div className="spinner"></div>
+                            <p className="text-slate-700 dark:text-slate-200 text-lg font-semibold">Processing dataset...</p>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="bg-orange-500/10 p-4 rounded-full mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <span className="material-symbols-outlined text-orange-500 text-4xl">cloud_upload</span>
+                            </div>
+                            <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">Drop your CSV/Excel file here</h3>
+                            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">or click to browse from your computer</p>
+                            <button
+                                type="button"
+                                className="px-6 py-2.5 bg-white dark:bg-[#171717] border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium hover:border-orange-500 dark:hover:border-orange-500 text-slate-700 dark:text-slate-300 transition-colors shadow-sm pointer-events-none"
+                            >
+                                Browse Files
+                            </button>
+                        </>
+                    )}
                 </div>
-            ) : (
-                <div className="fade-in-up">
-                    <div className="mb-6 relative">
-                        <svg className="mx-auto h-24 w-24 text-blue-400 glow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
-                        <div className="absolute inset-0 blur-3xl bg-blue-500/20 -z-10"></div>
+            </div>
+
+            {/* Progress bar — shown while simulating upload */}
+            {uploadProgress && (
+                <div className="glass-card p-5 shadow-lg fade-in-up">
+                    <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-3">
+                            <span className="material-symbols-outlined text-green-500 text-xl">description</span>
+                            <div className="flex flex-col">
+                                <span className="text-sm font-medium text-slate-900 dark:text-white">{uploadProgress.filename}</span>
+                                <span className="text-xs text-slate-500 dark:text-slate-400">{uploadProgress.size} MB • Uploading...</span>
+                            </div>
+                        </div>
+                        <span className="text-sm font-medium text-orange-500">{uploadProgress.progress}%</span>
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-3 bg-gradient-to-r from-white via-blue-200 to-cyan-200 bg-clip-text text-transparent">
-                        Drop your dataset here
-                    </h3>
-                    <p className="text-slate-400 text-lg mb-3">
-                        or click to browse
-                    </p>
-                    <div className="inline-flex items-center space-x-2 bg-slate-800/40 px-4 py-2 rounded-lg border border-slate-700/50 mt-4">
-                        <span className="text-sm text-slate-300">Supported formats:</span>
-                        <span className="text-sm font-semibold text-blue-400">CSV</span>
-                        <span className="text-slate-600">•</span>
-                        <span className="text-sm font-semibold text-emerald-400">Excel</span>
-                        <span className="text-slate-600">•</span>
-                        <span className="text-sm font-semibold text-purple-400">JSON</span>
+                    <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
+                        <div
+                            className="bg-orange-500 h-2 rounded-full transition-all duration-500 ease-out"
+                            style={{ width: `${uploadProgress.progress}%`, boxShadow: '0 0 10px rgba(249,115,22,0.5)' }}
+                        ></div>
                     </div>
                 </div>
             )}

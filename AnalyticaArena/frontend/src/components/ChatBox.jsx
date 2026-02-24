@@ -81,8 +81,8 @@ export default function ChatBox({ datasetId }) {
                 {messages.length === 0 ? (
                     <div className="text-center text-slate-400 mt-16 scale-in">
                         <p className="text-5xl mb-4 glow">💬</p>
-                        <p className="text-xl text-slate-300 mb-2">Ask me anything about your data!</p>
-                        <p className="text-sm text-slate-500 mb-8">I can answer questions, generate insights, and create visualizations</p>
+                        <p className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 mb-2">Ask me anything about your data!</p>
+                        <p className="text-sm font-medium text-slate-600 dark:text-slate-400 mb-8">I can answer questions, generate insights, and create visualizations</p>
                         <div className="space-y-3">
                             <p className="text-xs text-slate-600 uppercase tracking-wider">Try asking:</p>
                             <div className="flex flex-wrap gap-2 justify-center">
@@ -97,7 +97,7 @@ export default function ChatBox({ datasetId }) {
                                     <button
                                         key={i}
                                         onClick={() => setInput(suggestion)}
-                                        className="px-4 py-2 bg-slate-800/50 hover:bg-slate-700/50 rounded-lg text-xs transition-all border border-slate-700/50 hover:border-blue-500/50 hover:text-blue-300"
+                                        className="px-4 py-2 bg-white/50 dark:bg-slate-800/50 hover:bg-white/80 dark:hover:bg-slate-700/50 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 transition-all border border-slate-200 dark:border-slate-700/50 hover:border-orange-500/50 hover:text-orange-500 shadow-sm"
                                     >
                                         {suggestion}
                                     </button>
@@ -113,8 +113,8 @@ export default function ChatBox({ datasetId }) {
                         >
                             <div
                                 className={`max-w-[85%] rounded-2xl p-4 ${msg.role === 'user'
-                                        ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30'
-                                        : 'glass-card border border-slate-700/50'
+                                    ? 'bg-gradient-to-r from-orange-500 to-pink-500 text-white shadow-lg shadow-orange-500/20'
+                                    : 'glass-card border border-slate-700/50'
                                     }`}
                             >
                                 <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.content}</p>

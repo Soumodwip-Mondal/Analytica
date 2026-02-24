@@ -9,7 +9,6 @@ import ChatPage from './pages/ChatPage'
 import Reports from './pages/Reports'
 import LandingPage from './pages/LandingPage'
 import Navbar from './components/Navbar'
-import ParticleBackground from './components/ParticleBackground'
 import LoginModal from './components/LoginModal'
 import RegisterModal from './components/RegisterModal'
 
@@ -53,14 +52,17 @@ function LandingRoute() {
     )
 }
 
+import ThemeBackground from './components/ThemeBackground'
+
 function App() {
     const { token } = useAuth()
 
     return (
         <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <ParticleBackground />
+            <ThemeBackground />
             {token && <Navbar />}
-            <div className={token ? "pt-16" : ""}>
+            <div className={`min-h-screen relative overflow-x-hidden flex flex-col transition-colors duration-300 ${token ? "pt-16" : ""}`}>
+
                 <Routes>
                     {/* Legacy routes for direct access */}
                     <Route path="/login" element={<Login />} />

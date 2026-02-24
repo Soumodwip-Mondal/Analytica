@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
+import { authAPI } from '../services/api'
 
 const AuthContext = createContext(null)
 
@@ -17,8 +18,13 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         if (token) {
             localStorage.setItem('token', token)
+            // Fetch user profile
+            authAPI.getCurrentUser()
+                .then(res => setUser(res.data))
+                .catch(() => { }) // silently fail
         } else {
             localStorage.removeItem('token')
+            setUser(null)
         }
     }, [token])
 
