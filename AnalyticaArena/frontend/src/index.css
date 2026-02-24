@@ -277,33 +277,37 @@
   }
 
   .animate-text-reveal {
-    animation: text-reveal-continuous 6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    animation:
+      reveal-entry 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+      text-shimmer 4s 1.2s linear infinite;
   }
 
-  @keyframes text-reveal-continuous {
-
-    0%,
-    5% {
+  @keyframes reveal-entry {
+    0% {
       opacity: 0;
       filter: blur(10px);
       transform: translateY(15px);
       letter-spacing: -0.02em;
     }
 
-    15%,
-    85% {
+    100% {
       opacity: 1;
       filter: blur(0);
       transform: translateY(0);
       letter-spacing: normal;
     }
+  }
 
-    95%,
+  @keyframes text-shimmer {
+
+    0%,
     100% {
-      opacity: 0;
-      filter: blur(10px);
-      transform: translateY(-15px);
-      letter-spacing: -0.02em;
+      background-size: 200% auto;
+      background-position: 0% center;
+    }
+
+    50% {
+      background-position: 100% center;
     }
   }
 
