@@ -25,6 +25,13 @@
     color: #f1f5f9;
   }
 
+  html:not(.dark) body {
+    @apply bg-gray-50 text-gray-900;
+    background: radial-gradient(circle at 20% 50%, rgba(249, 115, 22, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.06) 0%, transparent 50%),
+      #f9fafb;
+  }
+
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
@@ -37,6 +44,10 @@
 
   html.dark ::-webkit-scrollbar-track {
     background: #0f172a;
+  }
+
+  html:not(.dark) ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
   }
 
   ::-webkit-scrollbar-thumb {
@@ -75,9 +86,18 @@
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
   }
 
+  html:not(.dark) .glass-card {
+    @apply bg-white/70 border border-gray-200 shadow-xl;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  }
+
   .glass-card:hover {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px);
+  }
+
+  html:not(.dark) .glass-card:hover {
+    @apply bg-white/90 border-orange-500/50;
   }
 
   /* Navbar glass panel - using raw CSS to avoid @apply issues */
@@ -145,6 +165,10 @@
     border-color: rgba(51, 65, 85, 0.5);
   }
 
+  html:not(.dark) .btn-secondary {
+    @apply bg-white text-gray-800 hover:bg-gray-50 border border-gray-200 hover:border-orange-500/30;
+  }
+
   .btn-secondary:hover {
     background: #f8fafc;
     border-color: #cbd5e1;
@@ -169,6 +193,10 @@
     background: rgba(255, 255, 255, 0.05);
     border-color: rgba(255, 255, 255, 0.1);
     color: #f1f5f9;
+  }
+
+  html:not(.dark) .input-field {
+    @apply bg-white border border-gray-300 text-gray-900 placeholder-gray-500;
   }
 
   .input-field::placeholder {
@@ -243,10 +271,32 @@
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
   }
 
-
   /* Neon border */
   .neon-border {
     box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.08), 0 4px 24px rgba(249, 115, 22, 0.05);
+  }
+
+  html:not(.dark) .neon-border {
+    background: linear-gradient(#ffffff, #ffffff) padding-box,
+      linear-gradient(45deg, #f97316, #ea580c, #ec4899) border-box;
+  }
+
+  /* Custom scrollbar for chat */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(249, 115, 22, 0.3);
+    border-radius: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(249, 115, 22, 0.6);
   }
 }
 
@@ -435,20 +485,50 @@
   }
 }
 
-/* Custom scrollbar for chat */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
+/* ============================================
+   LIGHT MODE UTILITY OVERRIDES (from main)
+   ============================================ */
+@layer utilities {
+  html:not(.dark) [class*="text-slate-"],
+  html:not(.dark) [class*="text-gray-"],
+  html:not(.dark) [class*="text-zinc-"] {
+    color: #111827 !important;
+  }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
+  html:not(.dark) .text-white:not(.btn-primary) {
+    color: #111827 !important;
+  }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(249, 115, 22, 0.3);
-  border-radius: 4px;
-}
+  html:not(.dark) [class*="bg-slate-8"],
+  html:not(.dark) [class*="bg-zinc-8"],
+  html:not(.dark) [class*="bg-zinc-9"] {
+    background-color: #f3f4f6 !important;
+  }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(249, 115, 22, 0.6);
+  html:not(.dark) [class*="border-slate-"],
+  html:not(.dark) [class*="border-zinc-"],
+  html:not(.dark) [class*="border-gray-"] {
+    border-color: #d1d5db !important;
+  }
+
+  html:not(.dark) .recharts-text {
+    fill: #111827 !important;
+  }
+
+  html:not(.dark) .recharts-cartesian-grid line {
+    stroke: #e5e7eb !important;
+  }
+
+  html:not(.dark) .recharts-legend-item-text {
+    color: #111827 !important;
+  }
+
+  html:not(.dark) .from-white {
+    --tw-gradient-from: #111827 var(--tw-gradient-from-position) !important;
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+  }
+
+  html:not(.dark) .to-slate-300 {
+    --tw-gradient-to: #6b7280 var(--tw-gradient-to-position) !important;
+  }
 }

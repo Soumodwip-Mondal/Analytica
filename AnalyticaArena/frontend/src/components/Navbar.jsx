@@ -1,5 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+<<<<<<< feature-navbar
 import { useState, useRef, useEffect } from 'react'
 
 // Theme toggle helper
@@ -7,14 +8,21 @@ function toggleTheme() {
     const isDark = document.documentElement.classList.toggle('dark')
     localStorage.theme = isDark ? 'dark' : 'light'
 }
+=======
+import { useTheme } from "../context/ThemeContext"
+>>>>>>> main
 
 export default function Navbar() {
     const { logout, user } = useAuth()
     const navigate = useNavigate()
+<<<<<<< feature-navbar
     const location = useLocation()
     const [showUserMenu, setShowUserMenu] = useState(false)
     const [isDark, setIsDark] = useState(document.documentElement.classList.contains('dark'))
     const menuRef = useRef(null)
+=======
+    const { theme, toggleTheme } = useTheme()
+>>>>>>> main
 
     const handleLogout = () => {
         logout()
@@ -154,6 +162,17 @@ export default function Navbar() {
                             )}
                         </div>
                     </div>
+<<<<<<< feature-navbar
+=======
+                    <div className="flex items-center space-x-4">
+                        <button onClick={handleLogout} className="btn-secondary text-sm py-2 px-6">
+                            🚪 Logout
+                        </button>
+                        <button onClick={toggleTheme} title="Toggle theme" className='btn-secondary text-sm py-2 px-4'>
+                            {theme === 'dark' ? '☀️' : '🌙'}
+                        </button>
+                    </div>
+>>>>>>> main
                 </div>
             </div>
         </nav>
