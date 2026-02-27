@@ -24,7 +24,7 @@ class AIService:
             return
         
         genai.configure(api_key=self.api_key)
-        self.model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        self.model = genai.GenerativeModel('gemini-2.5-flash')
     
     async def generate_insights(self, dataset_info: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Generate AI insights from dataset summary"""

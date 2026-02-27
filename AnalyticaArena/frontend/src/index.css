@@ -402,37 +402,9 @@
     z-index: 1;
   }
 
-  /* Background shimmer sweep */
-  .shimmer-button::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg,
-        transparent 45%,
-        rgba(255, 255, 255, 0.15) 50%,
-        transparent 55%);
-    transform: rotate(-45deg);
-    animation: shimmer-sweep 3s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 0;
-  }
-
   @keyframes shimmer-rotate {
     to {
       --shimmer-angle: 360deg;
-    }
-  }
-
-  @keyframes shimmer-sweep {
-    0% {
-      transform: translate(-100%, -100%) rotate(-45deg);
-    }
-
-    100% {
-      transform: translate(100%, 100%) rotate(-45deg);
     }
   }
 

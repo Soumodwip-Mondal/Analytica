@@ -6,6 +6,8 @@ import Dashboard from './pages/Dashboard'
 import ChatPage from './pages/ChatPage'
 import Reports from './pages/Reports'
 import LandingPage from './pages/LandingPage'
+import Features from './pages/Features'
+import About from './pages/About'
 import Navbar from './components/Navbar'
 import LoginModal from './components/LoginModal'
 import RegisterModal from './components/RegisterModal'
@@ -74,6 +76,8 @@ function App() {
                     <Route path="/reports" element={
                         <PrivateRoute><Reports /></PrivateRoute>
                     } />
+                    <Route path="/features" element={<Features />} />
+                    <Route path="/about" element={<About />} />
                     <Route path="/" element={<LandingRoute />} />
                 </Routes>
             </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 export default function LandingPage({ onOpenLogin, onOpenRegister }) {
     const [isDark, setIsDark] = useState(document.documentElement.classList.contains('dark'))
@@ -42,18 +43,11 @@ export default function LandingPage({ onOpenLogin, onOpenRegister }) {
                         </div>
                         <span className={`font-bold text-xl tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>Analytica</span>
                     </div>
-
-                    {/* Nav links (Always present per dark mode layout) */}
                     <nav className="hidden md:flex items-center gap-8">
-                        <a className={`text-sm font-medium transition-colors ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-orange-500'}`} href="#">Features</a>
-                        <a className={`text-sm font-medium transition-colors ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-orange-500'}`} href="#">Pricing</a>
-                        <a className={`text-sm font-medium transition-colors ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-orange-500'}`} href="#">Docs</a>
-                        <a className={`text-sm font-medium transition-colors ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-orange-500'}`} href="#">About</a>
+                        <Link className={`text-sm font-medium transition-colors ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-orange-500'}`} to="/features">Features</Link>
+                        <Link className={`text-sm font-medium transition-colors ${isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-orange-500'}`} to="/about">About</Link>
                     </nav>
-
-                    {/* Right actions */}
                     <div className="flex items-center gap-3">
-                        {/* Theme toggle */}
                         <button
                             aria-label="Toggle Dark Mode"
                             onClick={handleThemeToggle}
@@ -65,8 +59,6 @@ export default function LandingPage({ onOpenLogin, onOpenRegister }) {
                                 <span className="material-symbols-outlined text-[20px]">dark_mode</span>
                             )}
                         </button>
-
-                        {/* Login/Signup Buttons (always present) */}
                         <button
                             onClick={onOpenLogin}
                             className={`hidden sm:flex h-9 px-4 items-center justify-center rounded-lg border text-sm font-semibold transition-colors ${isDark ? 'border-white/10 bg-white/5 text-white hover:bg-white/10' : 'border-slate-300 bg-transparent text-slate-700 hover:bg-slate-100'}`}
@@ -91,7 +83,7 @@ export default function LandingPage({ onOpenLogin, onOpenRegister }) {
 
 
 
-                    {/* Bolt icon — floating */}
+                    {/* Bolt icon */}
                     <div className="relative flex justify-center">
                         <div className="relative" style={{ animation: 'float 6s ease-in-out infinite' }}>
                             <div className="absolute inset-0 bg-orange-500 blur-3xl opacity-20 rounded-full"></div>
@@ -131,8 +123,6 @@ export default function LandingPage({ onOpenLogin, onOpenRegister }) {
                             Unlock the hidden potential of your data with our next-generation AI models. Visualize, predict, and act in real-time.
                         </p>
                     </div>
-
-                    {/* CTA Buttons (always matches dark mode layout) */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full fade-in-up" style={{ animationDelay: '0.6s' }}>
                         <button
                             onClick={onOpenLogin}
@@ -251,11 +241,7 @@ export default function LandingPage({ onOpenLogin, onOpenRegister }) {
                     </div>
                 </div>
 
-                {/* Bottom gradient wash removed to align with exact requested theme */}
             </main>
-
-            {/* ── FOOTER ── */}
-            {/* Full footer matching dark mode layout */}
             <footer className={`border-t mt-auto relative z-20 ${isDark ? 'border-white/5' : 'border-slate-200'}`}
                 style={{ background: isDark ? 'rgba(15,23,42,0.8)' : 'rgba(255,255,255,0.8)', backdropFilter: 'blur(12px)' }}>
                 <div className="max-w-[1280px] mx-auto px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-8">
