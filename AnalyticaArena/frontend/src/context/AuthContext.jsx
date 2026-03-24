@@ -21,7 +21,9 @@ export const AuthProvider = ({ children }) => {
             // Fetch user profile
             authAPI.getCurrentUser()
                 .then(res => setUser(res.data))
-                .catch(() => { }) // silently fail
+                .catch(() => { 
+                    logout()
+                }) // silently fail
         } else {
             localStorage.removeItem('token')
             setUser(null)
@@ -29,6 +31,7 @@ export const AuthProvider = ({ children }) => {
     }, [token])
 
     const login = (newToken) => {
+        localStorage.setItem('token',newToken)
         setToken(newToken)
     }
 
